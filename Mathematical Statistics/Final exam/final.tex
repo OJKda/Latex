@@ -1,0 +1,559 @@
+\documentclass{oblivoir}
+
+\usepackage{fapapersize, amssymb, amsmath, graphicx, subcaption}
+\usepackage{booktabs}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\usepackage[skins]{tcolorbox}
+\usepackage{mathtools}
+\usepackage{color}
+
+\usefapapersize{*,*,30mm,*,30mm,*}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{4pt}
+\renewcommand{\footrulewidth}{2pt}
+\fancyhead[LE,RO]{}
+\fancyhead[RE,LO]{}
+\fancyfoot[CE,CO]{\thepage}
+
+\newcommand{\comb}[2]{{}_{#1}\mathrm{C}_{#2}}
+\newcommand{\perm}[2]{{}_{#1}\mathrm{P}_{#2}}
+\newcommand{\repe}[2]{{}_{#1}\mathrm{H}_{#2}}
+\newcommand{\DC}[1]{\textcolor{DarkMagenta}{#1}}% prints in DarkCyan
+\newcommand{\UP}[1]{$^{\mbox{\DC{\footnotesize #1}}}$}
+\newcommand\iidsim{\stackrel{\mathclap{iid}}{\sim}}
+\newcommand{\mat}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+\newcommand{\flr}[1]{\left ( #1 \right )}
+\newcommand{\slr}[1]{\left \{ #1 \right \}}
+\newcommand{\tlr}[1]{\left [ #1 \right]}
+%-------------------------------------------------------------
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\newcommand{\red}[1]{{\color{red} #1}}
+%-------------------------------------------------------------
+
+\newtcolorbox{myframe}[2][]{%
+  enhanced,colback=white,colframe=black,coltitle=black,
+  sharp corners,boxrule=0.4pt,
+  fonttitle=\itshape,
+  attach boxed title to top left={yshift=-0.3\baselineskip-0.4pt,xshift=2mm},
+  boxed title style={tile,size=minimal,left=0.5mm,right=0.5mm,
+    colback=white,before upper=\strut},
+  title=#2,#1
+}
+
+
+\title{ \Huge \textbf{고급수리통계학 기말고사} \vspace{2cm} }
+
+\author{\huge 2020221005 \vspace{4mm} \\ \huge오재권 \vspace{14cm}}
+
+\date{\Large 2021. 6. 13.}
+
+\begin{document}
+\maketitle
+
+\newpage
+\begin{enumerate}
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\item
+Given the pdf
+$$
+f(x;\theta) = \frac{1}{\pi [ 1 + (x - \theta)^2]}, \quad -\infty < x < \infty, \quad -\infty < \theta < \infty,
+$$
+show that the Rao-Cramer lower bound is $2/n$, where $n$ is the size of a random sample
+from this Cauchy distribution. What is the asymptotic distribution of $\sqrt{n} (\hat\theta - \theta)$
+if $\hat\theta$ is the mle of $\theta$?
+
+\blue{(Solution)} \\
+\textbf{Fisher Information}
+\begin{align*}
+I(\theta) &= E\tlr{\flr{\frac{\partial \log f(x;\theta) }{\partial \theta}}^2} \\
+&= E\tlr{\flr{\frac{\partial (- \log \pi - \log (1+(1-\theta)^2)) }{\partial \theta}}^2} \\
+&= E\tlr{\flr{\frac{2(x-\theta)}{1+(x-\theta)}}^2} \\
+&=\int_{-\infty}^{\infty} \flr{\frac{2(x-\theta)}{1+(x-\theta)^2}}^2 \frac{1}{\pi(1+(x-\theta)^2)} dx \\
+&= \frac{4}{\pi} \int_{-\infty}^{\infty} \frac{(x-\theta)^2}{(1+(x-\theta)^2)^3} dx, \qquad  t = x-\theta, \; dt = dx \\
+&= \frac{4}{\pi} \int_{-\infty}^{\infty} \frac{t^2}{(1+t^2)^3} dt \\
+&= \frac{8}{\pi} \int_{0}^{\infty} \frac{t^2}{(1+t^2)^3} dt \\
+&= \frac{8}{\pi} \int_{0}^{\infty} \frac{t^2}{(1+t^2)} \flr{\frac{1}{1+t^2}}^2 dt, 
+\qquad u = \frac{1}{1+t^2}, \; t = \flr{\frac{1}{u} - 1}^{\frac{1}{2}}, \; dt = \frac{1}{2} \flr{\frac{1}{u} - 1}^{-\frac{1}{2}}\flr{-\frac{1}{u^2}} du \\
+&= \frac{8}{\pi} \int_0^1 -(1-u) u^2 \frac{1}{2} \flr{\frac{1}{u} - 1}^{-\frac{1}{2}} \flr{-\frac{1}{u^2}} du \\
+&= \frac{4}{\pi} \int_0^1 (1-u) \flr{\frac{1}{u}-1}^{-\frac{1}{2}} du \\
+&= \frac{4}{\pi} \int_0^1 (1-u) \flr{\frac{u}{1-u}}^{\frac{1}{2}} du \\
+&= \frac{4}{\pi} \int_0^1 u^{\frac{1}{2}} (1-u)^{\frac{1}{2}} du \\
+&= \frac{4}{\pi} \int_0^1 u^{\frac{3}{2} - 1} (1-u)^{\frac{3}{2} - 1} du \qquad \mbox{(Beta integral)} \\
+&= \frac{4}{\pi} \frac{\Gamma\flr{\frac{3}{2}} + \Gamma\flr{\frac{3}{2}}}{\Gamma \flr{\frac{3}{2} + \frac{3}{2}}} \\
+&= \frac{4}{\pi} \frac{(0.5 \sqrt{\pi})^2}{2!} \\
+&= \frac{1}{2}
+\end{align*}
+\textbf{Rao-Cramer lower bound}
+$$
+RC_{lb} = \frac{1}{nI(\theta)} = \frac{2}{n}
+$$
+\textbf{Asymptotic distribution of mle}
+\begin{align*}
+\sqrt{n} (\hat\theta - \theta) \; &\overset{d}{\longrightarrow} \; N\flr{0, \frac{1}{I(\theta)}} \\
+&\overset{d}{\longrightarrow} \; N\flr{0, 2}
+\end{align*}
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+Let $X$ be $N(0,\theta), \; 0 < \theta < \infty$.
+\begin{align*}
+f(x;\theta) &= \frac{1}{\sqrt{2\pi\theta}} e^{-\frac{x^2}{2\theta}}\\
+\log f(x;\theta)& = -\frac{1}{2} \log 2\pi - \frac{1}{2} \log \theta - \frac{x^2}{2\theta}
+\end{align*}
+
+\begin{enumerate}
+\item[(a)]
+Find the Fisher information $I(\theta)$. \\
+\blue{(Solution)}
+\begin{align*}
+I(\theta) &= -E\tlr{\frac{\partial^2 \log f(x;\theta)}{\partial \theta^2}}  \\
+&= -E\tlr{\frac{\partial}{\partial \theta} \flr{-\frac{1}{2\theta} + \frac{x^2}{2\theta^2}}} \\
+&= -E\tlr{\frac{1}{2\theta^2} - \frac{x^2}{\theta^3}} \\
+&= -\frac{1}{2\theta^2} + \frac{1}{\theta^2} E\flr{\frac{x^2}{\theta}}, \qquad Z^2 = \frac{(x-\mu)^2}{\theta} = \frac{x^2}{\theta} \sim \chi^2_{(1)} , \; \mu = 0\\
+&= -\frac{1}{2\theta^2} + \frac{1}{\theta^2} \times 1 \\
+&= \frac{1}{2\theta^2}
+\end{align*}
+
+\vspace{3mm}
+\item[(b)]
+If $X_1, \ldots, X_n$ is a random sample from this distribution, show that the mle of $\theta, \; \hat\theta,$
+is an efficient estimator of $\theta$. \\
+\blue{(Solution)} \\
+\textbf{mle of $\theta$}
+\begin{align*}
+L(\theta) &=  \Pi_{i=1}^n f(x_i ;\theta) = \flr{\frac{1}{\sqrt{2\pi\theta}}}^n e^{-\frac{\sum_{i=1}^n x_i^2}{2\theta}} \\
+\ell(\theta) &= \log(L(\theta)) = -\frac{n}{2} \log 2\pi -\frac{n}{2} \log \theta - \frac{\sum_{i=1}^n x_i^2}{2\theta} \\
+\end{align*}
+\begin{align*}
+\frac{\partial \ell(\theta)}{\partial \theta} &= -\frac{n}{2}\cdot\frac{1}{\theta} + \frac{\sum_{i=1}^n x_i^2}{2\theta^2}
+\overset{set}{=} 0 \\
+&\Leftrightarrow \; -n\theta + \sum_{i=1}^n x_i^2 = 0 \\
+&\therefore \; \hat\theta = \frac{1}{n} \sum_{i=1}^n x_i^2
+\end{align*}
+\textbf{$\hat\theta$의 평균과 분산}
+\begin{align*}
+E(\hat\theta) &= E\flr{\frac{1}{n} \sum_{i=1}^n X_i^2} \\
+&= \frac{1}{n} (E(X_1^2) + \cdots + E(X_n^2)) \\
+&= \frac{1}{n} n E(X_1^2) \\
+&= (Var(X) + (E(X))^2), \qquad E(X) = 0, \; Var(X) = \theta  \\
+&=  \theta 
+\end{align*}
+$\Rightarrow$ $\hat\theta$ 는 $\theta$에 대한 unbiased estimator 이다. \\
+\begin{align*}
+Var(\hat\theta) &= Var\flr{\frac{1}{n} \sum_{i=1}^n X_i^2} \\
+&= \frac{1}{n^2} (Var(X_1^2) + \cdots + Var(X_n^2)) \\
+&= \frac{1}{n} Var(X_1^2), \qquad \frac{X^2}{\theta} \sim \chi^2_{(1)}, \; Var\flr{\frac{X^2}{\theta}} = 2 \\
+&= \frac{1}{n} 2\theta^2 
+\end{align*}
+\textbf{Rao-Cramer lower bound} 
+$$
+RC_{lb} = \frac{1}{nI(\theta)} = \frac{2\theta^2}{n}
+$$
+$\Rightarrow$ $Var(\hat\theta) = RC_{lb}$ 이므로 $\hat\theta$는 $\theta$에 대한 efficient estimator 이다.
+
+\vspace{3mm}
+\item[(c)]
+What is the asymptotic distribution of $\sqrt{n} (\hat\theta - \theta)$? \\
+\blue{(Solution)} \\
+\textbf{Asymptotic distribution}
+\begin{align*}
+\sqrt{n} (\hat\theta - \theta) \; &\overset{d}{\longrightarrow} \; N\flr{0, \frac{1}{I(\theta)}} \\
+&\overset{d}{\longrightarrow} \; N\flr{0, 2\theta^2}
+\end{align*}
+\end{enumerate}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+If $X_1, \ldots, X_n$ is a random sample from a distribution with pdf
+$$
+f(x;\theta) =
+\begin{cases}
+\frac{3 \theta^3}{(x+\theta)^4} \quad & 0 < x < \infty, \; 0 < \theta < \infty \\
+0 & \mbox{elsewhere},
+\end{cases}
+$$
+show that $Y = 2 \bar{X}$ is an unbiased estimator of $\theta$ and determine its efficiency. \\
+\blue{(Solution)} \\
+\textbf{$Y$의 평균과 분산} 
+\begin{align*}
+E(Y) &= E(2\bar{X}) = \frac{2}{n} E(\sum_{i=1}^n X_i)\\
+E(X) &= \int_0^{\infty} x \frac{3 \theta^3}{(x+\theta)^4} dx \\
+&= 3\theta^3 \int_0^{\infty} \frac{x}{(x+\theta)^4} dx \qquad t = x+\theta, \; dt = dx \\
+&= 3\theta^3 \int_{\theta}^{\infty} \frac{t - \theta}{t^4} dt \\
+&= 3\theta^3 \tlr{\int_{\theta}^{\infty} \frac{1}{t^3} dt -\theta \int_{\theta}^{\infty} \frac{1}{t^4} dt} \\
+&= 3\theta^3 \tlr{\tlr{- \frac{1}{2t^2}}_{\theta}^{\infty} + \tlr{\frac{\theta}{3t^3}}_{\theta}^{\infty}} \\
+&= 3\theta^3 \flr{\frac{1}{2\theta^2} - \frac{1}{3\theta^2}} \\
+&= 3\theta^3 \frac{1}{6\theta^2} \\
+&= \frac{\theta}{2}\\
+E(Y) &= \frac{2}{n}\cdot n \cdot\frac{\theta}{2} = \theta
+\end{align*}
+$\Rightarrow$ $Y$는 $\theta$에 대한 unbiased estimator 이다.
+\begin{align*}
+Var(Y) &= Var(2\bar{X}) = \frac{4}{n^2} Var\flr{\sum_{i=1}^n X_i} = \frac{4}{n} Var(X) \\
+Var(X) &= E(X^2) - \{ E(X) \}^2 \\
+E(X^2) &= \int_0^{\infty} x^2 \frac{3\theta^3}{(x+\theta)^4} dx \\
+&= 3\theta^3 \int_0^{\infty} \frac{x^2}{(x+\theta)^4} dx \qquad t = x + \theta, \; dt = dx \\
+&= 3\theta^3 \int_{\theta}^{\infty} \frac{(t-\theta)^2}{t^4} dt \\
+&= 3\theta^3 \tlr{\int_{\theta}^{\infty} \frac{1}{t^2} dt - \int_{\theta}^{\infty} \frac{2\theta}{t^3} dt  + \int_{\theta}^{\infty} \frac{\theta^2}{t^4} dt} 
+\end{align*}
+\begin{align*}
+\quad &= 3\theta^3 \tlr{\tlr{-\frac{1}{t}}_{\theta}^{\infty} - \tlr{- \frac{\theta}{t^2}}_{\theta}^{\infty} + \tlr{-\frac{\theta^2}{3t^3}}_{\theta}^{\infty}} \\
+&= 3\theta^3 \flr{\frac{1}{\theta} - \frac{1}{\theta} + \frac{1}{3\theta}} \\
+&= \theta^2 \\
+Var(X) &= \theta^2 - \frac{\theta^2}{4} = \frac{3}{4} \theta^2 \\
+Var(Y) &= \frac{4}{n} \cdot \frac{3}{4} \theta^2 = \frac{3}{n} \theta^2
+\end{align*}
+\textbf{Fisher Information}
+\begin{align*}
+I(\theta) &= -E\tlr{\frac{\partial^2 \log f(x;\theta)}{\partial \theta^2}}  \\
+&= -E\tlr{\frac{\partial^2}{\partial \theta^2}(3\log\theta - 4\log(x+\theta))} \\
+&= -E\tlr{\frac{\partial}{\partial \theta}\flr{\frac{3}{\theta} - \frac{4}{x+\theta}}} \\
+&= -E\tlr{-\frac{3}{\theta^2}  + \frac{4}{(x+\theta)^2}} \\
+&= \frac{3}{\theta^2} - 4 E\tlr{\frac{1}{(x+\theta)^2}} \\
+E\tlr{\frac{1}{(x+\theta)^2}} &= \int_0^{\infty} \frac{1}{(x+\theta)^2} \cdot \frac{3\theta^3}{(x+\theta)^4} dx \\
+&= \int_0^{\infty} \frac{3\theta^3}{(x+\theta)^6} dx, \qquad x + \theta = t, \; dt = dx \\
+&= \int_{\theta}^{\infty} \frac{3\theta^3}{t^6} dt \\
+&= \tlr{- \frac{3\theta^3}{5t^5}}_{\theta}^{\infty} \\
+&= \frac{3\theta^3}{5\theta^5} \\
+&= \frac{3}{5\theta^2} \\
+I(\theta) &= \frac{3}{\theta^2} - 4 \cdot \frac{3}{5\theta^2} = \frac{3}{5\theta^2}
+\end{align*}
+\textbf{Rao-Cramer lower bound} 
+$$
+RC_{lb} = \frac{1}{nI(\theta)} = \frac{5\theta^2}{3n}
+$$
+\textbf{Efficiency}
+$$
+\mbox{Efficiency} = \frac{RC_{lb}}{Var(Y)} = \frac{\frac{5\theta^2}{3n}}{\frac{3}{n} \theta^2} = \frac{5}{9} < 1
+$$
+$\Rightarrow$ $Var(Y) \ne RC_{lb} $ 이므로 $Y$ 는 $\theta$에 대한 efficient estimator가 아니다.\\
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+Let $\bar{X}$ be the mean of a random  sample of size $n$ from a $N(\theta, \sigma^2)$ distribution,
+$-\infty < \theta < \infty, \; \sigma^2 > 0$. Assume that $\sigma^2$ is known. Show that $\bar{X}^2 - \frac{\sigma^2}{n}$
+is an unbiased estimator of $\theta^2$ and find its efficiency. \\
+\blue{(Solution)}
+\begin{align*}
+E\flr{\bar{X}^2 - \frac{\sigma^2}{n}} &= E(\bar{X}^2) - \frac{\sigma^2}{n} \\
+&= Var(\bar{X}) + \slr{E(\bar{X})}^2 - \frac{\sigma^2}{n} \\
+&= \frac{\sigma^2}{n} + \theta^2 - \frac{\sigma^2}{n} \\
+&= \theta^2
+\end{align*}
+$\Rightarrow$ $\bar{X}^2 - \frac{\sigma^2}{n}$ 은 $\theta^2$에 대한 unbiased estimator이다.\\
+\textbf{Fisher Information}
+\begin{align*}
+I(\theta^2) &= -E\tlr{\frac{\partial^2 \log f(x;\theta^2)}{\partial (\theta^2)^2}}  \\
+&= -E\tlr{\frac{\partial^2}{\partial(\theta^2)^2} \flr{-\frac{1}{2} \log(2\pi\sigma^2) - \frac{(x-\theta)^2}{2\sigma^2}}} \\
+&= -E\tlr{\frac{\partial^2}{\partial(\theta^2)^2} \flr{-\frac{1}{2} \log(2\pi\sigma^2) - \frac{x^2}{2\sigma^2} + \frac{2x\sqrt{\theta^2}}{2\sigma^2} - \frac{\theta^2}{2\sigma^2}}} \\
+&= -E\tlr{\frac{\partial}{\partial\theta^2} \flr{\frac{x}{2\sigma^2\sqrt{\theta^2}} - \frac{1}{2\sigma^2}}} \\
+&= -E\tlr{- \frac{x}{4\sigma^2 (\theta^2)^{\frac{3}{2}}}} \\
+&= \frac{1}{4\sigma^2 (\theta^2)^{\frac{3}{2}}} \cdot E(X) \\
+&= \frac{1}{4\sigma^2 (\theta^2)^{\frac{3}{2}}} \cdot \theta \\
+&= \frac{1}{4\sigma^2 \theta^2}  
+\end{align*}
+\begin{align*}
+Var\flr{\bar{X}^2 - \frac{\sigma^2}{n}} &= Var(\bar{X}^2) \\
+&= E(\bar{X}^4) - \slr{E(\bar{X}^2)} \\
+& \star \; \mbox{\textbf{Moment of normal distribution}} \\ 
+& E(X^2) = \theta^2 + \sigma^2, \; E(X^4) = \theta^4 + 6 \theta^2 \sigma^2 + 3 \sigma^4 \\
+& = \theta^4 + 6 \theta^2 \frac{\sigma^2}{n} + 3 \frac{\sigma^4}{n^2} - \flr{\theta^2 + \frac{\sigma^2}{n}}^2 \\
+& =  4\theta^2\frac{\sigma^2}{n} + 2\frac{\sigma^4}{n^2} 
+\end{align*}
+\textbf{Rao-Cramer lower bound} 
+$$
+RC_{lb} = \frac{1}{nI(\theta)} = \frac{4\theta^2\sigma^2}{n}
+$$
+\textbf{Efficiency}
+$$
+\mbox{Efficiency} = \frac{RC_{lb}}{Var\flr{\bar{X}^2 - \frac{\sigma^2}{n}}} = \frac{\frac{4\theta^2\sigma^2}{n}}{4\theta^2\frac{\sigma^2}{n} + 2\frac{\sigma^4}{n^2} } =  \frac{4\theta^2}{4\theta^2 + 2 \frac{\sigma^2}{n}} < 1, \quad \sigma^2 > 0
+$$
+$\Rightarrow$ $Var\flr{\bar{X}^2 - \frac{\sigma^2}{n}} \ne RC_{lb}$ 이므로 $\bar{X}^2 - \frac{\sigma^2}{n}$ 은 $\theta^2$에 대한 efficient estimator가 아니다. \\
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item
+Let $X_1, \ldots, X_n \; \overset{iid}{\sim} \; N(0, \theta), \; 0<\theta < \infty$. Show that $\sum_{i=1}^n X_i^2$ is a sufficient
+statistic for $\theta$. \\
+\blue{(Solution)} \\
+\textbf{Factorization} 
+$$
+Y = \sum_{i=1}^n X_i^2 = u_1 (x_1, \ldots, x_n)
+$$
+\textbf{joint pdf}
+$$
+f(x_1;\theta) \cdots f(x_n; \theta) = \flr{\frac{1}{\sqrt{2\pi\theta}}}^n e^{-\frac{\sum_{i=1}^n x_i^2}{2\theta}}
+$$
+$$
+\flr{\frac{1}{\sqrt{\theta}}}^n = \theta^{-\frac{n}{2}} = e^{\log \theta^{-\frac{n}{2}}} = e^{-\frac{n}{2} \log \theta}
+$$
+$$
+f(x_1;\theta) \cdots f(x_n; \theta) = \underset{k_2(x_1, \ldots, x_n)}{\underbrace{\flr{\frac{1}{\sqrt{2\pi}}}^n}} \underset{k_1(u(x_1,\ldots,x_n;\theta))}{\underbrace{e^{-\frac{\sum_{i=1}^n x_i^2}{2\theta}-\frac{n}{2} \log \theta}}}
+$$
+$\Rightarrow$ $Y = \sum_{i=1}^n X_i^2$은 $\theta$에 대한 sufficient statistic 이다.
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+What is the sufficient statistic for $\theta$ if the sample arises from a beta distribution in which $\alpha = \beta = \theta > 0$? \\
+\blue{(Solution)} 
+$$
+X_1, \ldots, X_n \; \overset{iid}{\sim} \; Beta(\theta, \theta), \quad \theta > 0
+$$
+\textbf{pdf}
+\begin{align*}
+f(x;\theta) &= \frac{\Gamma(2\theta)}{\Gamma(\theta)\Gamma(\theta)} x^{\theta -1} (1-x)^{\theta-1}\\
+&= \frac{\Gamma(2\theta)}{(\Gamma(\theta))^2} [x(1-x)]^{\theta - 1}, \quad x \in [0,1] 
+\end{align*}
+\textbf{joint pdf}
+\begin{align*}
+f(x_1;\theta), \ldots, f(x_n;\theta) &= \flr{\frac{\Gamma(2\theta)}{(\Gamma(\theta))^2}}^n \cdot \flr{\Pi_{i=1}^n x_i (1-x_i)}^{\theta - 1} \\
+&= \underset{k_2(x_1,\ldots,x_n)}{\underbrace{1}} \times  \underset{k_1(u_1(x_1,\ldots, x_n);\theta)}{\underbrace{\flr{\frac{\Gamma(2\theta)}{(\Gamma(\theta))^2}}^n \cdot \flr{\Pi_{i=1}^n x_i (1-x_i)}^{\theta - 1}}}
+\end{align*}
+$$
+\therefore \; u(x_1,\ldots, x_n) = \Pi_{i=1}^n x_i (1-x_i) 
+$$
+$\Rightarrow$ $\Pi_{i=1}^n x_i (1-x_i)$ 는 $\theta$에 대한 sufficient statistic이다.
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+Let $Y_1 < Y_2 < Y_3 < Y_4 < Y_5$ be the order statistics of a random sample of size 5 from the uniform distribution 
+having pdf $f(x;\theta) = 1/ \theta, \; 0 < x < \theta, \; 0 < \theta < \infty$, zero elsewhere.
+\begin{enumerate}
+\item[(a)]
+Show that $2Y_3$ is an unbiased estimator of $\theta$. \\
+\blue{(Solution)}
+\begin{align*}
+f_{Y_k} (y_k) &= \frac{n!}{(k-1)!(n-k)!} f(y_k) [F(y_k)]^{k-1} [1-F(y_k)]^{n-k} \\
+f_{Y_3} (y_3) &= \frac{5!}{2!2!} \; \frac{1}{\theta} \; \flr{\frac{y_3}{\theta}}^{3-1} \flr{1-\frac{y_3}{\theta}}^{5-3} \\
+&= \frac{30}{\theta^3} \; y_3^2 \flr{1-\frac{y_3}{\theta}}^2
+\end{align*}
+\begin{align*}
+E(2y_3) &= \int_0^{\theta} 2y_3 \cdot \frac{30}{\theta^3} y_3^2 \flr{1-\frac{y_3}{\theta}}^2 dy_3 \\
+&= 60 \int_0^{\theta} \frac{y_3^3}{\theta^3} \flr{1-\frac{y_3}{\theta}}^2 dy_3 \qquad t = \frac{y_3}{\theta}, \; dt = \frac{1}{\theta} dy_3 \\
+&= 60 \; \theta \int_0^1 t^3 (1-t)^2 dt \\
+&= 60 \; \theta \int_0^1 t^{4-1} (1-t)^{3-1} dt \qquad \mbox{(Beta integral)} \\
+&= 60 \; \theta \; \frac{\Gamma(4) + \Gamma(3)}{\Gamma(4+3)} \\
+&= 60 \; \theta \; \frac{6 \times 2}{720} \\
+&= \theta
+\end{align*}
+$\Rightarrow$ $2Y_3$는 $\theta$에 대한 unbiased estimator 이다.
+
+\vspace{3mm}
+\item[(b)]
+Determine the joint pdf of $Y_3$ and the sufficient statistic $Y_5$ of $\theta$. \\
+\blue{(Solution)}
+\begin{align*}
+f_{Y_3, Y_5}(y_3,y_5) &= \frac{5!}{(3-1)!(5-3-1)!(5-5)!} \flr{\frac{y_3}{\theta}}^{3-1} \flr{\frac{y_5}{\theta} - \frac{y_3}{\theta}}^{5-3-1} \flr{1-\frac{y_5}{\theta}}^{5-5} \frac{1}{\theta} \frac{1}{\theta} \\
+&=60 \; \frac{y_3^2(y_5-y_3)}{\theta^5}, \qquad 0 < y_3 < y_5 < \theta
+\end{align*}
+
+\vspace{3mm}
+\item[(c)]
+Find the conditional expectation $E[2Y_3|y_5] = \rho(y_5)$. \\
+\blue{(Solution)}
+\begin{align*}
+E[2Y_3|Y_5 = y_5] &= 2 E[Y_3|Y_5 = y_5] \\
+&= 2 \int_0^{y_5} y_3 f_{Y_3|Y_5} (y_3|y_5) dy_3 \\
+f_{Y_3|Y_5} (y_3|y_5) &= \frac{f_{Y_3, Y_5}(y_3,y_5)}{f_{Y_5} (y_5)} \\
+f_{Y_5} (y_5) &= \frac{5!}{4!} \; \frac{1}{\theta} \flr{\frac{y_5}{\theta}}^{5-1} \flr{1- \frac{y_5}{\theta}}^{5-5}\\
+&= \frac{5}{\theta^5} \; y_5^4\\
+f_{Y_3|Y_5}(y_3|y_5) &= \frac{60 \; \frac{y_3^2(y_5-y_3)}{\theta^5}}{\frac{5}{\theta^5} y_5^4} \\
+&= 12 \; \frac{y_3^2y_5 - y_3^3}{y_5^4}
+\end{align*}
+\begin{align*}
+E[2Y_3|Y_5 = y_5] &= 2 \int_0^{y_5} y_3 f_{Y_3|Y_5} (y_3|y_5) dy_3 \\
+&= 2 \int_0^{y_5} y_3 12 \; \frac{y_3^2y_5 - y_3^3}{y_5^4} dy_3 \\
+&= \frac{24}{y_5^4} \int_0^{y_5} y_5y_3^3 - y_3^4 dy_3 \\
+&= \frac{24}{y_5^4} \tlr{\frac{y_5y_3^4}{4} - \frac{y_3^5}{5}}_0^{y_5} \\
+&= \frac{24}{y_5^4}\tlr{\frac{y_5^5}{4} - \frac{y_5^5}{5}}\\
+&= \frac{24}{y_5^4} \frac{y_5^5}{20} \\
+&= \frac{6}{5} y_5 = \rho(y_5)
+\end{align*} 
+
+\vspace{3mm}
+\item[(d)]
+Compare the variances of $2Y_3$ and $\rho(y_5)$.\\
+\blue{(Solution)} \\
+\textbf{variances of $2Y_3$}
+\begin{align*}
+Var(2Y_3) &= E((2Y_3)^2) - (E(2Y_3))^2 \\
+E((2Y_3)^2) &= 4 \int_0^{\theta} y_3^2 f_{y_3}(y_3) dy_3 \\
+&= 4 \int_0^{\theta} y_3^2 \frac{30}{\theta^3} y_3^2 \flr{1-\frac{y_3}{\theta}}^2 dy_3 \\
+&= 120 \int_0^{\theta} \theta \frac{y_3^4}{\theta^4} \flr{1-\frac{y_3}{\theta}}^2 dy_3 \qquad t = \frac{y_3}{\theta}, dt = \frac{1}{\theta} dy_3\\
+&= 120 \int_0^1 \theta^2 t^4 (1-t)^2 dt \\
+&= 120 \; \theta^2 \int_0^1 t^{5-1} (1-t)^{3-1}dt \qquad \mbox{(Beta integral)}\\
+&= 120 \; \theta^2 \; \frac{\Gamma(5) \times \Gamma(3)}{\Gamma(5+3)} = \frac{8}{7} \theta^2 \\
+\therefore \; Var(2Y_3) &= \frac{8}{7} \theta^2 - \theta^2 = \frac{1}{7}\theta^2
+\end{align*}
+\textbf{variances of $\rho(y_5)$}
+\begin{align*}
+Var(\rho(y_5)) &= E\flr{\flr{\frac{6}{5} y_5}^2} - \flr{E\flr{\frac{6}{5} y_5}}^2 \\
+E(Y_5) &= \int_0^{\theta} y_5 \frac{5}{\theta^5} y_5^4 dy_5 = \int_0^{\theta} \frac{5}{\theta^5} y_5^5 \\
+&= \frac{5}{\theta^5} \tlr{\frac{y_5^6}{6}}_0^{\theta} = \frac{5}{6} \theta
+\end{align*}
+\begin{align*}
+E(Y_5^2) &= \int_0^{\theta} y_5^2 \frac{5}{\theta^5} y_5^4 dy_5 = \int_0^{\theta} \frac{5}{\theta^5} y_5^6 \\
+&= \frac{5}{\theta^5} \tlr{\frac{y_5^7}{7}}_0^{\theta} = \frac{5}{7} \theta^2 \\
+\therefore \; Var(\rho(y_5)) &= \frac{36}{25} \cdot \frac{5}{7} \theta^2 - \theta^2 = \frac{1}{35} \theta^2
+\end{align*}
+$$
+\therefore \; Var(2Y_3) = \frac{1}{7} \theta^2 \; > \; Var(\rho(y_5)) = \frac{1}{35} \theta^2
+$$
+\end{enumerate}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+Let $X_1, \ldots, X_n$ be a random sample from a Poisson distribution with mean $\theta$. Find the conditional expectation 
+$E[X_1 + 2X_2 + 3X_3| \sum_{i=1}^n X_i]$. \\
+\blue{(Solution)}
+\begin{align*}
+E[X_1 + 2X_2 + 3X_3| \sum_{i=1}^n X_i] &= E(X_1|\sum X_i) + 2E(X_2|\sum X_i) + 3E(X_3|\sum X_i)\\
+&= 6 E(X_1 | \sum_{i=1}^n X_i)
+\end{align*}
+\begin{align*}
+E(X_1|\sum X_i = t) &= \sum_{k=0}^t k P(X_1 = k | \sum_{i=1}^n X_i = t) \\
+&=  \sum_{k=0}^t k \frac{P(X_1 = k , \sum_{i=1}^n X_i = t)}{P(\sum_{i=1}^n X_i = t)} \\
+&= \sum_{k=0}^t k \frac{P(X_1 = k , \sum_{k=2}^n X_i = t - k)}{P(\sum_{i=1}^n X_i = t)} \\
+&= \sum_{k=0}^t k \frac{\frac{\theta^k}{k!} e^{-\theta} \frac{((n-1)\theta)^{t-k}}{(t-k)!} e^{-(n-1)\theta}}{\frac{(n\theta)^t}{t!} e^{-n\theta}} \\
+&= \sum_{k=0}^t k \frac{t!}{k!(t-k)!} \frac{\theta^k((n-1)\theta)^{t-k}}{(n\theta)^t} \\
+&= \sum_{k=0}^t k \mat{t}{k} \frac{(n-1)^t \theta^t \theta^k}{n^t (n-1)^k \theta^t \theta^k} \\
+&= \flr{ 1- \frac{1}{n}}^t \sum_{k=0}^t k \mat{t}{k} \frac{1}{(n-1)^k} \\
+E[X_1 + 2X_2 + 3X_3| \sum_{i=1}^n X_i = t] &= 6 E(X_1 | \sum_{i=1}^n X_i = t) \\
+&= 6 \flr{ 1- \frac{1}{n}}^t \sum_{k=0}^t k \mat{t}{k} \frac{1}{(n-1)^k} \\
+\end{align*}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item 
+If $az^2 + bz + c = 0$ for more than two values of $z$, then $a=b=c=0$. Use this result to show that the family $\{Beta(2, \theta) : 0 < \theta < 1\}$
+is complete. \\
+\blue{(Solution)} 
+$$
+X_1, X_2 \; \overset{iid}{\sim} \; Bern(\theta), \quad \theta \in [0.1]
+$$
+Let
+$$
+S = X_1 + X_2 \sim Bin(2,\theta) 
+$$
+pmf of $S$
+$$
+P(S=s) = \mat{2}{s} \theta^s (1-\theta)^{2-s}, \quad s \in\{0, 1, 2\}
+$$
+Let $u$ be any (measurable) function such that $E(u(S)) = 0$. We need to show that $u \equiv 0$ (almost surely,
+$u \ne 0$ only on a set of points with probability zero).
+\begin{align*}
+0 &= E(u(S)) = \sum_{k=0}^2 u(k) P(S = k) = \sum_{k=0}^2 u(k) \mat{2}{k} \theta^k (1-\theta)^{2-k} \\
+&= u(0) (1-\theta)^2 + 2u(1) \theta(1-\theta) + u(2) \theta^2 \\
+&= u(0) (\theta^2 -2\theta + 1) + 2u(1) (\theta - \theta^2) + u(2) \theta^2 \\
+&= (u(0) - 2u(1) +u(2)) \theta^2 + (-2u(0) + 2u(1)) \theta + u(0) \\
+&\Rightarrow \; 
+\begin{cases}
+u(0) = 0 \\
+(-2u(0) + 2u(1)) \; \Rightarrow \; u(1) = 0\\
+(u(0) - 2u(1) +u(2)) \; \Rightarrow \; u(2) = 0\\
+\end{cases} \\
+&\therefore \; u(0) = u(1) = u(2) = 0 \; \Rightarrow \; u = 0
+\end{align*}
+The family $\{Beta(2, \theta) : 0 < \theta < 1\}$ is complete.
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\vspace{5mm}
+\item
+Let a random sample of size $n$ be taken from a distribution of the discrete type with pmf $f(x;\theta) = 1/\theta,\; x = 1,2,\ldots,\theta,$ zero elsewhere,
+where $\theta$ is an unknown positive integer.
+\begin{enumerate}
+\item[(a)]
+Show that the largest observation, say $Y$, of the sample is a complete sufficient statistic for $\theta$. \\
+\blue{(Solution)}
+$$
+Y = u_1(x_1,\ldots, x_n) = \underset{1\leq i \leq n}{max} \; x_i
+$$
+\textbf{joint pdf}
+\begin{align*}
+f(x_1,\ldots, x_n ; \theta) &= \frac{1}{\theta^n} I_{\slr{1,2,\ldots,\theta}}(x_1) \cdots I_{\slr{1,2,\ldots,\theta}}(x_n) \\
+&= \frac{1}{\theta^n} I_{\slr{1,2,\ldots,\theta}}(\underset{1\leq i \leq n}{max} x_i) \\
+&=  \underset{k_2(x_1,\ldots,x_n)}{\underbrace{1}} \cdot \underset{k_1(u(x_1, \ldots, x_n);\theta)}{\underbrace{\frac{1}{\theta^n} I_{\slr{1,2,\ldots,\theta}}(\underset{1\leq i \leq n}{max} x_i)}}
+\end{align*}
+$\therefore$ $Y = \underset{1\leq i \leq n}{max} \; x_i$ 는 $\theta$에 대한 sufficient statistic 이다.
+
+\textbf{Calculate pmf of $Y$} \\
+cdf of $X$
+$$
+F_X(x;\theta) = \sum_{i=1}^x P(X=x) = \sum_{i=1}^x \frac{1}{\theta} = \frac{x}{\theta} , \quad x \in \slr{1,2,\ldots, \theta}
+$$
+cdf of $Y$
+\begin{align*}
+F_Y(k) = P(Y=k) &= P(\underset{1\leq i \leq n}{max} \; x_i \leq k) \\
+&= P(x_1 \leq k, x_2 \leq k, \ldots, x_n \leq k) \\
+&= P(x_1 \leq k) \cdots P(x_n \leq k) \\
+&= \tlr{F_X(k;\theta)}^n\\
+&= \flr{\frac{k}{\theta}}^n
+\end{align*}
+\textbf{pmf of $Y$}
+$$
+f_Y(y) = F_Y(k) - F_Y(k-1) = \flr{\frac{k}{\theta}}^n - \flr{\frac{k-1}{\theta}}^n = \frac{k^n - (k-1)^n}{\theta^n}, \quad k \in \slr{1,2,\ldots, \theta}
+$$
+Let $u$ be any (measurable) function such that $E(u(Y)) = 0$, for all $\theta \in \mathbb{N}$.
+\begin{align*}
+0 &= E(u(Y)) = \sum_{k=1}^{\theta} u(k) P(Y=k) = \sum_{k=1}^{\theta} u(k) \frac{k^n - (k-1)^n}{\theta^n} \\
+0 &= \sum_{k=1}^{\theta} u(k) (k^n - (k-1)^n) , \quad \mbox{for all } \theta \in \mathbb{N}
+\end{align*}
+Let's show by induction that $u(k) = 0$, for all $k \in \mathbb{N}$.
+\begin{itemize}
+\item 
+$\theta = 1$
+$$
+0 = u(1)(1-0) = u(1) \; \Rightarrow \; u(1) = 0
+$$
+
+\item
+Let's assume that $u(k) = 0$, for all $1 \leq k \leq m$. We prove that $u(m+1) = 0$.
+$$
+0 = \sum_{k=1}^{m+1} u(k) (k^n - (k-1)^n) = u(m+1) \cdot \underset{\ne 0}{\underbrace{((m+1)^n - m^n)}}
+$$
+$$
+\therefore \; u(m+1) = 0
+$$
+
+\item
+We have shown that $u(k) = 0$, for all $k \in \mathbb{N}$.
+$$
+u = 0
+$$
+
+\item 
+$Y$ is a complete statistic.
+\end{itemize}
+
+\vspace{3mm}
+\item[(b)]
+Prove that
+$$
+\frac{Y^{n+1} - (Y - 1)^{n+1}}{Y^n - (Y - 1)^n}
+$$
+is the unique MVUE of $\theta$. \\
+\blue{(Solution)} \\
+$Y$ is a complete sufficient statistic.
+$$
+U = \frac{Y^{n+1} - (Y - 1)^{n+1}}{Y^n - (Y - 1)^n}
+$$
+\begin{align*}
+E(U) &= \sum_{k=1}^{\theta} \flr{\frac{k^{n+1} - (k - 1)^{n+1}}{k^n - (k - 1)^n}} P(Y=k) \\
+&= \sum_{k=1}^{\theta} \flr{\frac{k^{n+1} - (k - 1)^{n+1}}{k^n - (k - 1)^n}} \frac{k^n - (k-1)^n}{\theta^n} \\
+&= \frac{1}{\theta^n} \sum_{k=1}^{\theta} (k^{n+1} - (k-1)^{n+1}) \\
+&= \frac{1}{\theta^n} [(1^{n+1} - 0^{n+1}) + (2^{n+1} - 1^{n+1}) + \cdots + ((\theta - 1)^{n+1} - (\theta-2)^{n+1}) \\
+& \hphantom{{} + ((\theta - 1)^{n+1} - (\theta-2)^{n+1})} \qquad \qquad \qquad \;\; + (\theta^{n+1} - (\theta-1)^{n+1})] \\
+&= \frac{1}{\theta^n} \theta^{n+1} \\
+&= \theta
+\end{align*}
+$\therefore$ $U$ 는 $\theta$에 대해 unbiased estimator 이고 complete sufficient statistic ($Y$) 의 함수이므로 $\theta$에 대한 unique MVUE 이다.
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+\end{enumerate}
+\end{enumerate}
+
+\end{document}
