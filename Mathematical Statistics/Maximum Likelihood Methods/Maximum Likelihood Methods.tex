@@ -1,0 +1,44 @@
+\documentclass{oblivoir}
+
+\usepackage{fapapersize, amssymb, amsmath, graphicx, subcaption}
+\usepackage{booktabs}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\usepackage[skins]{tcolorbox}
+\usepackage{mathtools}
+
+\usefapapersize{*,*,30mm,*,30mm,*}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{4pt}
+\renewcommand{\footrulewidth}{2pt}
+\fancyhead[LE,RO]{}
+\fancyhead[RE,LO]{}
+\fancyfoot[CE,CO]{\thepage}
+
+\newcommand{\comb}[2]{{}_{#1}\mathrm{C}_{#2}}
+\newcommand{\perm}[2]{{}_{#1}\mathrm{P}_{#2}}
+\newcommand{\repe}[2]{{}_{#1}\mathrm{H}_{#2}}
+\newcommand{\DC}[1]{\textcolor{DarkMagenta}{#1}}% prints in DarkCyan
+\newcommand{\UP}[1]{$^{\mbox{\DC{\footnotesize #1}}}$}
+\newcommand\iidsim{\stackrel{\mathclap{iid}}{\sim}}
+\newcommand{\mat}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+
+
+\newtcolorbox{myframe}[2][]{%
+  enhanced,colback=white,colframe=black,coltitle=black,
+  sharp corners,boxrule=0.4pt,
+  fonttitle=\itshape,
+  attach boxed title to top left={yshift=-0.3\baselineskip-0.4pt,xshift=2mm},
+  boxed title style={tile,size=minimal,left=0.5mm,right=0.5mm,
+    colback=white,before upper=\strut},
+  title=#2,#1
+}
+
+\title{Maximum Likelihood Methods}
+\begin{document}
+\maketitle
+
+\end{document}
