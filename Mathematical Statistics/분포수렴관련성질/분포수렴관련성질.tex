@@ -1,0 +1,215 @@
+\documentclass{oblivoir}
+
+\usepackage{fapapersize, amssymb, amsmath, graphicx, subcaption}
+\usepackage{booktabs}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\usepackage[skins]{tcolorbox}
+\usepackage{mathtools}
+
+\usefapapersize{*,*,30mm,*,30mm,*}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{4pt}
+\renewcommand{\footrulewidth}{2pt}
+\fancyhead[LE,RO]{}
+\fancyhead[RE,LO]{}
+\fancyfoot[CE,CO]{\thepage}
+
+\newcommand{\comb}[2]{{}_{#1}\mathrm{C}_{#2}}
+\newcommand{\perm}[2]{{}_{#1}\mathrm{P}_{#2}}
+\newcommand{\repe}[2]{{}_{#1}\mathrm{H}_{#2}}
+\newcommand{\DC}[1]{\textcolor{DarkMagenta}{#1}}% prints in DarkCyan
+\newcommand{\UP}[1]{$^{\mbox{\DC{\footnotesize #1}}}$}
+\newcommand\iidsim{\stackrel{\mathclap{iid}}{\sim}}
+\newcommand{\mat}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+
+
+\newtcolorbox{myframe}[2][]{%
+  enhanced,colback=white,colframe=black,coltitle=black,
+  sharp corners,boxrule=0.4pt,
+  fonttitle=\itshape,
+  attach boxed title to top left={yshift=-0.3\baselineskip-0.4pt,xshift=2mm},
+  boxed title style={tile,size=minimal,left=0.5mm,right=0.5mm,
+    colback=white,before upper=\strut},
+  title=#2,#1
+}
+
+
+\begin{document}
+\begin{itemize}
+\item
+$\Delta$ - method
+
+가정
+
+$$
+\sqrt{n} (X_n - \theta) \overset{D}{\longrightarrow} N(0, \sigma^2)
+$$
+
+$g(x)$ is differentiable at $\theta$, $g^{\prime} (\theta) \ne 0$.
+
+$$
+\sqrt{n} (g(X_n) - g(\theta)) \overset{D}{\longrightarrow} N(0,\sigma^2 (g^{\prime}(\theta))^2)
+$$
+
+proof) Taylor expansion
+
+$g(X_n)$을 $\theta$에서 테일러 전개
+
+$$
+g(X_n) = g(\theta) + g^{\prime}(\theta) (X_n - \theta) + \underset{remainder \; O_p (|X_n - \theta|) \Rightarrow 0}{ \underline{ \frac{1}{2} g^{\prime\prime}(\theta)(X_n - \theta) + \cdots } }
+$$
+\begin{myframe}{}
+\begin{align*}
+g(X_n) &= g(\theta) + g^{\prime}(\theta) (X_n - \theta) \\
+g(X_n) - g(\theta) &=  g^{\prime}(\theta) (X_n - \theta) \\
+\sqrt{n} (g(X_n) - g(\theta)) &=  \sqrt{n} (g^{\prime}(\theta) (X_n - \theta)) \\
+\end{align*}
+\end{myframe}
+$$
+\therefore \; g^{\prime} (\theta) \cdot \sqrt{n} (X_n - \theta) \overset{D}{\longrightarrow} N(0, \sigma^2 (g^{\prime}(\theta))^2)
+$$
+
+\item 
+MGF Technique
+
+목표 : $X_n \overset{D}{\longrightarrow} X$
+
+If 
+$$
+M_{X_n}(t) \; : \; mgf \; of \; X_n, \quad M(t) \; : \; mgf \; of \; X
+$$,
+$$
+\lim_{n\rightarrow \infty} M_{X_n} (t) = M(t), \quad |t| \leq h.
+$$
+
+$\Rightarrow$ ~ 즉, mgf가 같으면 해당 분포로 분포 수렴.
+
+\item
+중심극한정리\UP{Central Limit Theorem}
+
+: 모든 분포를 ``정규분포"로 수렴시킬수 있다. ($n$개의 ``합"의 분포, $\sum X_i$)
+
+\begin{myframe}{Definition}
+$X_1, \ldots, X_n \; \sim \; (\mu, \sigma^2)$
+$$
+Y_n = \frac{\sum X_i - n \mu}{\sqrt{n} \sigma} \overset{D}{\longrightarrow} N(0,1)
+$$
+
+기초통계 : $\frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}}$
+\end{myframe}
+
+proof)
+\begin{enumerate}
+\item mgf technique, Taylor expansion
+
+$X_1, \ldots, X_n \; \sim \; (\mu, \sigma^2), \;E(\sum X_i) = n\mu, \; Var(\sum X_i) = n \sigma^2$
+$$
+Y_n = \frac{\sum X_i - n \mu}{\sqrt{n} \sigma} = \frac{\sqrt{n}(\bar{X}_n - mu)}{\sigma}
+$$
+
+$mgf \; of \; (X - \mu), \; M(t) = E(e^{tx})$
+$$
+m(t) = E(e^{t(x - \mu)})  = e^{-\mu t} M(t), \quad |t| \leq h
+$$
+\begin{myframe}{}
+\begin{align*}
+m(0) &= 1 \\
+m^{\prime} (0) &= E((x-\mu) e^{t(x-\mu)} |_{t=0} = E(x-\mu) = 0 \\
+m^{\prime\prime}(0) &= E((x-\mu)^2 e^{t(x-\mu)} |_{t=0} = E((x-\mu)^2) = \sigma^2 \\ 
+\end{align*}
+\end{myframe}
+
+Taylor expansion
+\begin{align*}
+m(t) &= m(0) + m^{\prime} (0) t + \frac{m^{\prime\prime} (\xi)t^2}{2} , \quad 0 < \xi < t \\
+&= 1 + \frac{m^{\prime\prime} (\xi)t^2}{2} \\
+&= 1 + \frac{\sigma^2 t^2}{2} + \frac{(m^{\prime\prime} (\xi) - \sigma^2 )t^2}{2}
+\end{align*}
+Consider $M(t;n)$
+\begin{align*}
+M(t;n) &= E \left[ exp \left( t \frac{\sum X_i - n \mu}{\sigma \sqrt{n}} \right)\right] \\
+&= E \left[ exp \left( t \frac{ X_1 - n \mu}{\sigma \sqrt{n}} \right) \cdot exp \left( t \frac{ X_2 - n \mu}{\sigma \sqrt{n}} \right) \cdots exp \left( t \frac{ X_n - n \mu}{\sigma \sqrt{n}} \right)\right] \\
+&= E \left[ exp \left( t \frac{X_1 - n \mu}{\sigma \sqrt{n}} \right)\right] \cdots E \left[ exp \left( t \frac{X_n - n \mu}{\sigma \sqrt{n}} \right)\right] \\
+&= \left \{ E \left[ exp \left( t \frac{X - n \mu}{\sigma \sqrt{n}} \right)\right] \right \}^n \\
+&= \left[m\left(\frac{t}{\sigma\sqrt{n}}\right) \right]^n, \qquad -h < \frac{t}{\sigma\sqrt{n}} < h\\
+&= \left\{ 1 + \frac{t^2}{2n} + \frac{[m^{\prime\prime}(\xi) - \sigma^2] t^2}{2n\sigma^2} \right\}^n, \qquad 0 < \xi < \frac{t}{\sigma\sqrt{n}}, \; -h\sigma\sqrt{n} < t < h\sigma\sqrt{n}\\
+\lim_{n \rightarrow \infty} M(t;n) &= \lim_{n \rightarrow \infty} \left\{ 1 + \frac{t^2}{2n} + \frac{[m^{\prime\prime}(\xi) - \sigma^2] t^2}{2n\sigma^2} \right\}^n\\
+&= \lim_{n \rightarrow \infty} \left[ 1 + \frac{t^2 / 2}{n} \right]^n \\
+&= e^{\frac{t^2}{2}}, \quad mgf \; of \; N(0,1)
+\end{align*}
+\begin{myframe}{5.2.16}
+$\lim_{n \rightarrow \infty} \psi(n) = 0$,
+$$
+\lim_{n \rightarrow \infty} \left[ 1 + \frac{b}{n} + \frac{\psi (n)}{n} \right]^{cn} = \lim_{n \rightarrow \infty} \left( 1 + \frac{b}{n} \right)^{cn} = e^{bc}
+$$
+\end{myframe}
+
+
+\item 로피탈의 정리를 이용한 증명
+\begin{myframe}{L`Hopital's Theorem}
+극한값이 부정형 $(0/0, \; \infty / \infty)$ 일 경우 미분을 이용하여 계산할 수 있도록 하는 방법
+
+함수 $f(x), g(x)$가 미분가능하고 $f(a) = 0, g(a) = 0$이고, $\displaystyle \lim_{x \rightarrow a} g(x) \ne 0$ 일때,
+$$
+\lim_{x \rightarrow a} \frac{f(x)}{g(x)} = \lim_{x \rightarrow a} \frac{f^{\prime} (x)}{g^{\prime}(x)}
+$$
+\end{myframe}
+\begin{myframe}{Law of Large Numbers}
+\begin{itemize}
+\item[(Strong)]
+$$
+\bar{X}_n \rightarrow \mu \mbox{ as }  n \rightarrow \infty \mbox{ with prob } 1.
+$$
+\item[(Weak)] 
+$$
+\mbox{For any } C > 0, \; P(|\bar{X}_n - \mu| > c) \rightarrow 0 \mbox{ as } n \rightarrow \infty
+$$
+\end{itemize}
+\end{myframe}
+
+\item[$\star$] 
+$\bar{X}_n - \mu \rightarrow 0$ with prob 1, but what dose the distribution of $\bar{X}_n$ look like?
+
+\begin{myframe}{CLT}
+$$
+\sqrt{n}\; \frac{\bar{X}_n - \mu}{\sigma} \rightarrow N(0,1) \mbox{ in distribution.}
+$$
+Equvalently
+$$
+\frac{\sum_{j=1}^n X_j - n\mu}{\sqrt{n} \sigma} \rightarrow N(0,1) \mbox{ in distribution.}
+$$
+\end{myframe}
+
+proof) (assume MGF $M(t)$ of $X_j$ exists)
+
+Can assume $\mu = 0, \sigma = 1$, since consider $\displaystyle \frac{1}{\sqrt{n}} \sum_{j=1}^n \frac{X_j - \mu}{\sigma}$. Let $S_n = \sum_{j=1}^n X_j$, show MGF of 
+$\frac{S_n}{\sqrt{n}}$ goes to $N(0,1)$ MGF.
+\begin{align*}
+E\left(e^{t S_n / \sqrt{n}} \right) &= E\left(e^{t X_1 / \sqrt{n}} \right) \cdots E\left(e^{t X_n / \sqrt{n}} \right) \\
+&= \left(M\left(\frac{t}{\sqrt{n}} \right) \right)^n
+\end{align*}
+Take logs
+\begin{align*}
+\lim_{n \rightarrow \infty} n \log M\left( \frac{t}{\sqrt{n}} \right) &= \lim_{n \rightarrow \infty} \frac{\log M\left( \frac{t}{\sqrt{n}} \right)}{1/n}, \quad y = \frac{1}{\sqrt{n}} \\
+&= \lim_{y \rightarrow 0} \frac{\log M\left( yt\right)}{y^2} \\
+&= \lim_{y \rightarrow 0} \frac{t M^{\prime}(yt)}{2yM(yt)} , \quad \lim_{y \rightarrow 0} M(yt) = 1 \\
+&= \frac{t}{2} \lim_{y \rightarrow 0} \frac{M^{\prime}(yt)}{y}  \\
+&= \frac{t^2}{2} \lim_{y \rightarrow 0} \frac{M^{\prime\prime}(yt)}{1} \\
+&= \frac{t^2}{2}
+\end{align*}
+Which is the log of $e^{\frac{t^2}{2}}$ ($N(0,1)$ MGF)
+\begin{myframe}{}
+\begin{align*}
+M(t) &= E(e^{tx}) \\
+M(0) &= 1 \\
+M^{\prime}(0) &= E(t e^{tx})|_{t=0} = 0 \\
+M^{\prime\prime}(0) &= E(e^{tx} + t^2 e^{tx})|_{t=0} = 1
+\end{align*}
+\end{myframe}
+\end{enumerate}
+\end{itemize}
+\end{document}
