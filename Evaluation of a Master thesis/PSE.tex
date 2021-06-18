@@ -1,0 +1,103 @@
+\section{Pliable regression splines}
+\begin{frame}{Bone mineral density data}
+\begin{itemize}
+\item 청소년과 젊은 성인들의 골밀도 (bone mineral density) 데이터
+\end{itemize}
+\begin{figure}
+\includegraphics[scale=0.35]{BMD}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Nonparametric regression model}
+\begin{itemize}
+\item Data :
+$$
+(x_1, z_1, y_1), \ldots, (x_n, z_n, y_n)
+$$
+\vspace{3mm}
+\item Model :
+$$
+y_i = \mathnormal{f}(x_i, z_i) + \varepsilon_i \quad \mbox{for} \quad i = 1, \ldots, n,
+$$
+where $y_i \in \mathbb{R}, \; x_i \in [0,1], \; z_i = (z_{i1}, \ldots, z_{iK}) \in \mathbb{R}^K, \; E(\varepsilon_i) = 0$ and $Var(\varepsilon_i) > 0$.
+\vspace{3mm}
+\item Goal : 
+\begin{center}
+Estimate $\mathnormal{f}$ based on the given data.
+\end{center}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Objective function}
+\begin{itemize}
+\item \blue{Pliable Spline Estimator (PSE)} :
+
+For $x \in [0,1]$ and the binary vector $ z = (z_1, \ldots, z_K)$
+with length $K$, define
+% Linear combination of B-splines with auxiliary binary variable :
+$$
+f(x, z;\theta) = \sum_{j=1}^J \beta_j B_j(x) + \sum_{j=1}^J \sum_{k=1}^K \gamma_{jk} z_k B_j(x),
+$$
+where 
+$\theta = (\beta, \gamma_1, \ldots, \gamma_J)$ is a coefficient vector with
+$\beta = (\beta_1, \ldots, \beta_J) \in \R^J$ and
+$\gamma_j = (\gamma_{j1}, \ldots, \gamma_{jK}) \in \R^K$
+for $j = 1, \ldots, J$. 
+\vspace{3mm}
+\item Residual sum of squares objective function :
+$$
+R(\theta) = \frac{1}{2n}\sum_{i=1}^n (y_i - f(x_i, z_i;\theta))^2
+$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Coordinate descent algorithm}
+\begin{itemize}
+\item Univariate objective function of $\beta_j$ and $\gamma_{jk}$ :
+$$
+r_j (\beta_j) = R(\tilde\beta^{(-j)},\tilde\gamma_1, \ldots, \tilde\gamma_J) 
+$$
+and
+$$
+r_{jk}(\gamma_{jk}) = R \left( \tilde\beta, \tilde\gamma_1, \ldots, \tilde\gamma_{j-1},
+\tilde\gamma_j^{(-k)}, \tilde\gamma_{j+1}, \ldots, \tilde\gamma_J \right)
+$$
+\vspace{3mm}
+\item Coordinate-wise update :
+$$
+\tilde\beta_j \leftarrow \argmin_{\beta_j \in \R} r_j(\beta_j)
+\quad\mbox{and}\quad
+\tilde\gamma_{jk} \leftarrow \argmin_{\gamma_{jk} \in \R} r_{jk}(\gamma_{jk}).
+$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Update $\theta = (\beta_j, \gamma_j)$ by CDA}
+\begin{itemize}
+\item The quadratic form of $\beta_j$
+$$
+r_j(\beta_j) 
+= \frac{\sum_{i=1}^n B_j^2(x_i)}{2n} \left ( \beta_j - 
+\frac{\sum_{i=1}^n y_{ij} B_j(x_i)}{\sum_{i=1}^n B_j^2(x_i)} \right )^2 + (\mbox{terms independent for } \beta_j)
+$$
+\item Update $\beta_j$
+$$
+\tilde\beta_j \leftarrow \frac{\sum_{i=1}^n y_{ij} B_j(x_i)}{\sum_{i=1}^n B_j^2(x_i)} 
+\for j = 1, \ldots, J.
+$$
+\item Similarly, $r_{jk}$ can be expressed as quadratic form of $\gamma_{jk}$
+\iffalse
+$$
+r_{jk}(\gamma_{jk})
+= \frac{\sum_{i=1}^n z_{ik}^2 B_j^2(x_i)}{2n} \left \{ \gamma_{jk} - 
+\frac{\sum_{i=1}^n y_{ijk} z_{ik} B_j(x_i)}{\sum_{i=1}^n z_{ik}^2 B_j^2(x_i)} \right \}^2 
++ (\mbox{terms independent for } \gamma_{jk}) 
+$$
+\fi
+\item Update $\gamma_{jk}$
+$$
+\tilde\gamma_{jk} \leftarrow \frac{\sum_{i=1}^n y_{ijk} z_{ik} B_j(x_i)}{\sum_{i=1}^n z_{ik}^2 B_j^2(x_i)} 
+\for j = 1, \ldots, J, \; k = 1, \ldots, K.
+$$
+\end{itemize}
+\end{frame}
