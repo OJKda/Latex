@@ -1,0 +1,286 @@
+\documentclass{oblivoir}
+
+\usepackage{fapapersize, amssymb, amsmath, graphicx, subcaption}
+\usepackage{booktabs}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\usepackage[skins]{tcolorbox}
+\usepackage{mathtools}
+
+\usefapapersize{*,*,30mm,*,30mm,*}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{4pt}
+\renewcommand{\footrulewidth}{2pt}
+\fancyhead[LE,RO]{}
+\fancyhead[RE,LO]{}
+\fancyfoot[CE,CO]{\thepage}
+
+\newcommand{\comb}[2]{{}_{#1}\mathrm{C}_{#2}}
+\newcommand{\perm}[2]{{}_{#1}\mathrm{P}_{#2}}
+\newcommand{\repe}[2]{{}_{#1}\mathrm{H}_{#2}}
+\newcommand{\DC}[1]{\textcolor{DarkMagenta}{#1}}% prints in DarkCyan
+\newcommand{\UP}[1]{$^{\mbox{\DC{\footnotesize #1}}}$}
+\newcommand\iidsim{\stackrel{\mathclap{iid}}{\sim}}
+\newcommand{\mat}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+
+
+\newtcolorbox{myframe}[2][]{%
+  enhanced,colback=white,colframe=black,coltitle=black,
+  sharp corners,boxrule=0.4pt,
+  fonttitle=\itshape,
+  attach boxed title to top left={yshift=-0.3\baselineskip-0.4pt,xshift=2mm},
+  boxed title style={tile,size=minimal,left=0.5mm,right=0.5mm,
+    colback=white,before upper=\strut},
+  title=#2,#1
+}
+
+
+\begin{document}
+
+\begin{itemize}
+\item 추론\UP{Inference}
+\begin{itemize}
+\item 추정\UP{Estimation}
+\begin{itemize}
+\item 점추정\UP{Point estimation}
+\item 구간추정\UP{interval estimation}
+\end{itemize}
+\item 검정\UP{Test}
+\end{itemize}
+
+\item
+\textbf{Point estimation}
+\begin{itemize}
+\item
+ $X_i, \ldots, X_n \;\overset{iid}{\sim}\; (\theta)$ ; random sample, $n$ : sample size
+
+\item
+$T = T(x_1, \ldots, x_n)$ : $X_1, \ldots, X_n$의 조합으로 이루어진 통계량\UP{statistic}, 확률변수 
+
+\item
+$X$ : 확률변수, $x$ : 관측값 (관찰값)
+
+\item 
+$\theta \in \Omega$, $\Omega$ : 모수공간
+
+\item 
+추정량\UP{estimator}
+
+$T$ : $\theta$의 추정량, 추정량 $\in$ 통계량
+
+$t = T(x_1, \ldots, x_n)$ : 추정치\UP{estimate}
+
+\item
+좋은 추정량의 조건
+
+unbiasedness : $E(T) - \theta = 0$
+\begin{itemize}
+\item $T$는 $\theta$의 불편추정량이다.
+\end{itemize}
+\end{itemize}
+
+\item 
+\textbf{Maximum likelihood estimator}
+\begin{itemize}
+\item 
+$X_1, \ldots, X_n \;\overset{iid}{\sim}\; f(x;\theta)\; \Rightarrow$ 동일한 pdf $f(x;\theta)$ 를 갖는 분포로부터 뽑힌 독립인 $n$개의 표본
+
+\item 
+목표 : $\theta$ 추정 - $X_1, \ldots, X_n$을 사용
+
+$X_1, \ldots, X_n$의 joint pdf
+$$
+f(x_1, \ldots, x_n ; \theta) = \prod_{i=1}^n f(x_i ; \theta) 
+$$
+
+$\theta$를 모수로 갖을때 $(X_1 = x_1, \ldots, X_n = x_n)$ 으로 관측될 가능성
+
+Change the role of $X$ and $\theta$
+$$
+L(\theta ; x_1, \ldots, x_n) \; \mbox{가능도함수}, \; f(x_1, \ldots, x_n ; \theta) \mbox{의미 동일}
+$$
+
+IDEA : 가능도함수 $L(\theta ; x_1, \ldots, x_n)$를 최대로 해주는 $\theta$를 $\theta$의 추정량으로 선택
+
+$\Rightarrow \; \hat\theta^{mle} = \underset{\theta \in \Omega}{argmax} L(\theta;x_1,\ldots,x_n) = \underset{\theta \in \Omega}{argmax} \ell(\theta;x)$
+
+\begin{align*}
+L(\theta ; x_1, \ldots, x_n) &= \prod_{i=1}^n f(x_i ; \theta) \\
+\ell(\theta ; x_1, \ldots, x_n) &= \log L(\theta; x_1, \ldots, x_n) \\
+&= \sum_{i=1}^n \log f(x_i ; \theta)
+\end{align*}
+
+$\ell(\theta)$ 는 대부분 오목함수\UP{concave}
+$$
+\frac{\partial \ell(\hat\theta^{mle})}{\partial \theta} = 0 \quad \Rightarrow \quad Estimating \; Equation
+$$
+
+\begin{itemize}
+\item[ex)] 
+Nomal $X_1, \ldots, X_n \overset{iid}{\sim} N(\mu, \sigma^2)$, Find $\hat\mu^{mle}, \; \hat{\sigma^2}^{mle}$.
+
+\begin{align*}
+L(\theta ; x_1, \ldots, x_n) &= \prod_{i=1}^n \frac{1}{\sqrt{2\pi \sigma^2}} exp\left\{-\frac{(x_i - \mu)^2}{2\sigma^2} \right\} \\
+&= (2\pi)^{-\frac{n}{2}} (\sigma^2)^{-\frac{n}{2}} exp\left\{-\frac{\sum_{i=1}^n (x_i - \mu)^2}{2\sigma^2} \right\} \\
+\ell(\theta ; x_1, \ldots, x_n) &= -\frac{n}{2} \log (2\pi) - \frac{n}{2} \log (\sigma^2) - \frac{\sum_{i=1}^n (x_i - \mu)^2}{2\sigma^2} \\
+\end{align*}
+\begin{itemize}
+\item[①]
+\begin{align*}
+\frac{\partial \ell}{\partial \mu} &= \frac{\sum_{i=1}^n (x_i - \mu)}{\sigma^2} \overset{set}{=} 0\\
+&\Leftrightarrow \sum_{i=1}^n (x_i - \mu) = 0\\
+&\Leftrightarrow \sum x_i = n\mu \\
+&\therefore \; \mu = \bar{x}, \; \hat\mu^{mle} = \bar{x}
+\end{align*}
+
+\item[②]
+\begin{align*}
+\frac{\partial \ell}{\partial \sigma^2} &= - \frac{n}{2\sigma^2} + \frac{\sum_{i=1}^n (x_i - \mu)^2}{2} \frac{1}{\sigma^4} \overset{set}{=} 0 \\
+&\Leftrightarrow \frac{-n \sigma^2 + \sum_{i=1}^n (x_i - \mu)^2}{2 \sigma^4} = 0 \\
+&\Leftrightarrow n \sigma^2 =  \sum_{i=1}^n (x_i - \mu)^2 = 0 \\
+&\therefore \; \sigma^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \mu)^2 \\
+&\therefore \; \hat{\sigma^2}^{mle} = \frac{1}{n} \sum_{i=1}^n (x_i - \mu)^2
+\end{align*}
+\end{itemize}
+\item[ex)]
+Uniform $X_1, \ldots, X_n \;\overset{iid}{\sim} \; U(0, \theta)$, Find $\hat\theta^{mle}$
+
+\begin{align*}
+L(\theta ; x_1, \ldots, x_n) &= \prod_{i=1}^n \frac{1}{\theta} \; I_{(0 \leq x_i \leq \theta)}\\
+&= \frac{1}{\theta^n} \; I_{(min(x_i) \geq 0)} \; I_{(max(x_i) \leq 0)} \\ 
+\end{align*}
+$\Rightarrow \; \frac{1}{\theta^n}$ : $\theta$ 에 대한 감소함수 ($\theta$가 가장 작을때 , $\frac{1}{\theta^n}$ 은 가장 커진다)
+
+$$
+\therefore \; \theta = max(x_i) , \quad \hat\theta^{mle} = max(x_i) 
+$$
+\end{itemize}
+\end{itemize}
+
+\item
+\textbf{Confidence Intervals} : $\theta$가 속해있을 것이라 생각되는 구간을 제시
+$$
+P(\theta \in [L,U]) = 1 - \alpha, \quad \alpha : \mbox{fixed value}
+$$
+\begin{itemize}
+\item 
+$\alpha = 0$인 경우는 의미 없음 $\Rightarrow$ 아무런 정보를 주지 않음
+
+\item 
+$\alpha$를 적당히 작은  값으로 고정
+
+\item 
+구간 길이가 가장 작을때 좋은 구간추정량이다.
+
+\item[$\star$]
+ \textbf{구간추정, 검정을 어떻게 할것인가?}
+
+\textbf{Pivot random variable (Pivotal quaritity)}
+
+$\Rightarrow$ ~ 추정 대상 모수 $\theta$와 $\theta$의 좋은 점추정량으로 이루어진 \textbf{잘 알려진 분포}를 가지고 있는 확률변수
+$\Rightarrow$ 확률 계산을 하기 위해 잘 알려진 분포를 따르는 확률변수를 사용한다.
+\end{itemize}
+
+\item
+\textbf{Order statistics}
+
+$X_1, \ldots, X_n \; \overset{iid}{\sim} \; f(x ; \theta) \; \Rightarrow \; min(X_i) = Y_1 < Y_2 < \cdots < Y_n = max(X_i)$ 으로 재배열
+
+$Y_k : X_1, \ldots, X_n $ 중에서 크기가 $k$번째로 작은 값
+
+\begin{itemize}
+\item[①] 
+$Y_1, \ldots, Y_n$ 의 joint pdf $\Rightarrow$ 변수변환
+$$
+g(y_1, \ldots, y_n) = 
+\begin{cases}
+n! f(y_1)\cdots f(y_n) \quad & a < y_1 < \cdots < y_n < b \\
+0 & elsewhere
+\end{cases} 
+$$
+$X$를 나열하는 모든 경우의 수만큼의 항이 나오게 된다. 각 항은 $f(y_1) \cdots f(y_2) |J|$ 이다. 여기서 모든 항의 $|J|$ 은 1이다. 
+따라서 나열하는 모든 경우의 수 $(n!)$ 만큼 $f(y_1) \cdots f(y_2)$의 합이 된다.
+
+\item[②] 
+Population median
+$$
+F(x) = P(X \leq x) = \int_a^x f(w) dw, \quad a < x < b
+$$
+$\Rightarrow \; F(m) = \frac{1}{2}$, ~~ $m$ : population median 
+
+\begin{itemize}
+\item[ex)] 
+$n = 3$
+
+$X_1, X_2, X_3 \;\overset{iid}{\sim}\; f(x) \;\Rightarrow \; Y_1 < Y_2 < Y_3, \quad Y_2 : \mbox{ sample median}$
+\begin{itemize}
+\item[⑴] $Y_1, Y_2, Y_3$ 의 joint pdf
+$$
+g(y_1, y_2, y_3) = 
+\begin{cases}
+6 f(y_1)f(y_2)f(y_3) \quad & a < y_1 < y_2 < y_3 < b \\
+0 & elsewhere
+\end{cases} 
+$$
+\item[⑵] $Y_2$ 의 marginal pdf
+\begin{align*}
+h(y_2) &= \int_{y_2}^b \int_a^{y_2} 6 f(y_1)f(y_2)f(y_3) dy_1 dy_3 \\
+&= \int_{y_2}^b 6f(y_2)f(y_3) \int_a^{y_2} f(y_1) dy_1 dy_3 \\
+&= 6f(y_2)F(y_2) \int_{y_2}^b f(y_3) dy_3 \\
+&= 
+\begin{cases}
+6f(y_2)F(y_2)(1-F(y_2)), \quad & a < y_2 < b\\
+0, & elsewhere
+\end{cases}
+\end{align*}
+\item[⑶] Compute $F(m) =  P(Y_2 \leq m)$
+\begin{align*}
+&= \int_a^m 6f(y_2)F(y_2)(1-F(y_2)) dy_2 \\
+&= \int_a^m 6f(y_2)F(y_2) - 6f(y_2)F(y_2)^2 dy_2 \\
+&= \left[6\frac{F(y_2)^2}{2} - 6\frac{F(y_2)^3}{3} \right]_a^m \\
+&=6 \left[\frac{F(m)^2}{2} - 6\frac{F(m)^3}{3} \right]  \\
+&=3\frac{1}{4} - 2 \frac{1}{8} = \frac{1}{2} \\
+&= F_{y_2} (m)
+\end{align*}
+$\Rightarrow$ 표본중위수 ($Y_2$) 의 중위수가 모집단의 중위수 ($m$) 가 된다.
+\end{itemize}
+\end{itemize}
+\item[③] Marginal pdf
+\begin{itemize}
+\item[ex)] $n = 3$
+\begin{align*}
+h(y_2) &= \int_{y_2}^b \int_a^{y_2} 6 f(y_1)f(y_2)f(y_3) dy_1 dy_3 \\
+&= \int_{y_2}^b 6f(y_2)f(y_3) \int_a^{y_2} f(y_1) dy_1 dy_3 \\
+&= 6f(y_2)F(y_2) \int_{y_2}^b f(y_3) dy_3 \\
+&= 
+\begin{cases}
+6f(y_2)F(y_2)(1-F(y_2)), \quad & a < y_2 < b\\
+0, & elsewhere
+\end{cases}
+\end{align*}
+\item[ex)] $n = 4$
+\begin{align*}
+h(y_3) = \int \int \int 4! f(y_1)f(y_2)f(y_3)f(y_4) dy dy dy
+\end{align*}
+\end{itemize}
+\textbf{(Generalization)}
+\begin{align*}
+g_k(y_k) = \frac{n!}{(k-1)! (n-k)! 1!} f(y_k) [F(y_k)]^{k-1} [1-F(y_k)]^{n-k} 
+\end{align*}
+
+\item[④] Heuristic derivation
+$$
+P\left( x - \frac{\Delta}{2} \leq x \leq x + \frac{\Delta}{2} \right) \approx \Delta f(x) \mbox{~ (밑변)} \times  \mbox{(높이)}
+$$
+
+\item[⑤] Joint pdf of any two order statistics $(Y_i < Y_j)$
+$$
+g_{ij}(y_i, y_j) = \frac{n!}{(i-1)!(j-i-1)!(n-j)!} [F(y_i)]^{i-1} [F(y_j) - F(y_i)]^{j-i-1} [1-F(y_j)]^{n-j} f(y_i) f(y_j)
+$$
+\end{itemize}
+\end{itemize}
+
+\end{document}
