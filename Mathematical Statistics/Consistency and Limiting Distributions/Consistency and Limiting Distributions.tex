@@ -1,0 +1,419 @@
+\documentclass{oblivoir}
+
+\usepackage{fapapersize, amssymb, amsmath, graphicx, subcaption}
+\usepackage{booktabs}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\usepackage[skins]{tcolorbox}
+\usepackage{mathtools}
+
+\usefapapersize{*,*,30mm,*,30mm,*}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{4pt}
+\renewcommand{\footrulewidth}{2pt}
+\fancyhead[LE,RO]{}
+\fancyhead[RE,LO]{}
+\fancyfoot[CE,CO]{\thepage}
+
+\newcommand{\comb}[2]{{}_{#1}\mathrm{C}_{#2}}
+\newcommand{\perm}[2]{{}_{#1}\mathrm{P}_{#2}}
+\newcommand{\repe}[2]{{}_{#1}\mathrm{H}_{#2}}
+\newcommand{\DC}[1]{\textcolor{DarkMagenta}{#1}}% prints in DarkCyan
+\newcommand{\UP}[1]{$^{\mbox{\DC{\footnotesize #1}}}$}
+\newcommand\iidsim{\stackrel{\mathclap{iid}}{\sim}}
+\newcommand{\mat}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+
+
+\newtcolorbox{myframe}[2][]{%
+  enhanced,colback=white,colframe=black,coltitle=black,
+  sharp corners,boxrule=0.4pt,
+  fonttitle=\itshape,
+  attach boxed title to top left={yshift=-0.3\baselineskip-0.4pt,xshift=2mm},
+  boxed title style={tile,size=minimal,left=0.5mm,right=0.5mm,
+    colback=white,before upper=\strut},
+  title=#2,#1
+}
+
+
+\begin{document}
+\begin{itemize}
+\item
+Convergence in Probability
+
+\begin{myframe}{Convergence}
+$$
+\underset{Sequence}{a_n} \xrightarrow{n \rightarrow \infty} \underset{Constant}{a}
+$$
+$$
+\lim_{n \rightarrow \infty } a_n = a
+$$
+\end{myframe}
+
+$$
+\underset{Convergence \; in \; Probability}{\underset{Random \; Variable}{X_n} \xrightarrow{n \rightarrow \infty} \underset{Randon \; Variable}{X}}
+$$
+
+\begin{myframe}{Definition}
+$X_n$ : sequence of random variable
+
+$X$ : random variable
+
+We say that ``$X_n$ convergence in probability to $X$". If
+\begin{align*}
+\lim_{n \rightarrow \infty} P [ |X_n - X | \geq \varepsilon] &= 0\\
+\lim_{n \rightarrow \infty} P [ |X_n - X | \leq \varepsilon] &= 1, \quad \forall \varepsilon > 0.
+\end{align*}
+If so, we write $X_n \overset{P}{\longrightarrow} X$
+\end{myframe}
+
+\item 
+약대수의 법칙\UP{Weak Law of Large Number}
+
+$$
+\bar{X}_n \overset{P}{\longrightarrow} \mu \quad \Leftrightarrow \quad \lim_{n \rightarrow \infty} P [ |\bar{X}_n - \mu | \geq \varepsilon] = 0
+$$
+
+\begin{myframe}{Chebyshe's ineguality}
+$X \sim (\mu, \sigma^2)$
+$$
+P[|X-\mu| \geq a \cdot \sigma] \leq \frac{1}{a^2}
+$$
+\end{myframe}
+
+$$
+\Leftrightarrow \lim_{n \rightarrow \infty} P\left[ |\bar{X}_n - \mu | \geq \left(\varepsilon \cdot \frac{\sqrt{n}}{\sigma}\right) \cdot \frac{\sigma}{\sqrt{n}}  \right] \leq \frac{\sigma^2}{\varepsilon^2 n} \xrightarrow{n \rightarrow \infty} 0
+$$
+
+\item
+$E(X_i) = \mu$
+\begin{align*}
+\Rightarrow \; \frac{1}{n} \sum X_i &\overset{P}{\longrightarrow} E(X_i)\\
+\frac{1}{n} \sum X_i^2 &\overset{P}{\longrightarrow} E(X_i^2)\\
+\frac{1}{n} \sum X_i^n &\overset{P}{\longrightarrow} E(X_i^n)\\
+\end{align*}
+
+\item 
+확률 수렴 성질
+
+가정 : $X_n \overset{P}{\longrightarrow} X, \quad Y_n \overset{P}{\longrightarrow} Y $
+\begin{enumerate}
+\item
+$X_n + Y_n \overset{P}{\longrightarrow} X+Y$
+
+\item 
+$aX_n \overset{P}{\longrightarrow} aX$
+
+\item
+$X_n \overset{P}{\longrightarrow} a  \; \Rightarrow \; g(X_n) \overset{P}{\longrightarrow} g(a)$, \; g : a\mbox{에서 연속}
+
+\item 
+$X_n Y_n , \overset{P}{\longrightarrow} XY$
+\begin{align*}
+X_n Y_n  &= \frac{1}{2} X_n^2 + \frac{1}{2} Y_n^2 - \frac{1}{2} (X_n - Y_n)^2 \\
+&= \frac{1}{2} X^2 + \frac{1}{2} Y^2 - \frac{1}{2} (X - Y)^2 \\
+&= XY
+\end{align*} 
+\end{enumerate}
+
+\item 
+일치추정량\UP{Consistency : 일치성}
+
+$\hat\theta_n : \theta$의 추정량
+
+$\hat\theta_n : X_1, \ldots, X_n$의 집합인 통계량 
+
+If, $\hat\theta_n \overset{P}{\longrightarrow} \theta$, then $\hat\theta_n$ is a consistent estimator of $\theta$
+
+\begin{align*}
+\Leftrightarrow & \lim_{n \rightarrow \infty} P[ |\hat\theta_n - \theta| \leq \varepsilon] = 1 \\
+\Leftrightarrow & \lim_{n \rightarrow \infty} P[ \theta - \varepsilon \leq \hat\theta_n \leq \theta + \varepsilon ] =  1 \\
+\Leftrightarrow & \lim_{n \rightarrow \infty} [ F(\theta + \varepsilon) - F(\theta - \varepsilon)] = 1
+\end{align*}
+
+example) sample mean $\bar{X}_n$ and sample variance $S_n^2$
+\begin{align*}
+\bar{X}_n &= \frac{1}{n} \sum X_i \overset{P}{\longrightarrow} \mu \\
+S_n^2 &= \frac{1}{n-1} \sum (X_i - \bar{X})^2 \overset{P}{\longrightarrow} \sigma^2
+\end{align*}
+
+\begin{itemize}
+\item sample variance
+\begin{align*}
+S_n^2 &= \frac{1}{n-1} \left[\sum X_i^2 - 2 \bar{X}_n \sum X_i + n \bar{X}_n^2 \right] \\
+&= \frac{1}{n-1} \left[\sum X_i^2 - n \bar{X}_n^2\right] \\
+&= \frac{n}{n-1} \left[\frac{1}{n} \sum X_i^2 - \bar{X}_n^2\right] \\
+&\overset{n \rightarrow \infty}{\longleftrightarrow} 1 \cdot \left[E(X_i^2) - \mu^2 \right] \\
+&= \sigma^2
+\end{align*}
+$$
+S_n^2 \overset{P}{\longrightarrow} \sigma^2
+$$
+$\therefore$ 표본 분산 $S_n^2$은 모분산 $\sigma^2$의 일치추정량.
+\end{itemize}
+
+example) Suppose $X_1, \ldots, X_n \overset{iid}{\sim} U(0, \theta)$. Let $Y = max\{ X_1, \ldots, X_n \}$ ; order statistics.
+
+\begin{enumerate}
+\item cdf of $Y_n$
+\begin{align*}
+F_n(y) &= P(Y_n \leq y) \\
+&= P(X_1 \leq y) \cdots P(X_n \leq y) \\
+&= \left[F_X(y) \right]^n \\
+&= 
+\begin{cases}
+\left(\frac{y}{\theta} \right)^n, \quad &0 \leq y \leq \theta \\
+0, & y < 0 \\
+1, & y \geq \theta
+\end{cases} 
+\end{align*}
+
+\item pdf of $Y_n$
+$$
+f_n(y) = F_n^{\prime} (y) = n \left( \frac{y}{\theta}\right)^{n-1} \frac{1}{\theta} = \frac{n}{\theta^n} y^{n-1}
+$$
+
+\item $E(Y_n)$
+\begin{align*}
+E(Y_n) &= \int_0^{\theta} y \cdot \frac{n}{\theta^n} y^{n-1} dy \\
+&= \left[\frac{1}{n+1} y^{n-1} \frac{n}{\theta^n} \right]_0^{\theta} \\
+&= \frac{n}{n+1} \frac{\theta^{n+1}}{\theta} \\
+&= \frac{n}{n+1} \theta \\
+\end{align*}
+
+\item Unbiased estimator of $Y_n$
+\begin{align*}
+&\therefore \; E(Y_n) = \frac{n}{n+1} \theta\\
+&\Leftrightarrow \frac{n+1}{n} E(Y_n) = \theta \\
+&\Leftrightarrow E\left(\frac{n+1}{n} Y_n \right)  = \theta
+\end{align*}
+즉, $\frac{n+1}{n} max(X_1, \ldots, X_n)$은 $\theta$의 불편추정량
+
+직관) $n$개를 균등하게 뽑는다. ``평균적으로" 기대되는 $X_1, \ldots, X_n$은 등간격으로 뽑힘
+, 간격 : $\frac{\theta}{n+1}$
+
+\item Check consistency
+$$
+Q \; : \; Y_n \overset{P}{\longrightarrow} \theta \quad ?
+$$
+\begin{align*}
+\Leftrightarrow& \lim_{n \rightarrow \infty} P[|Y_n - \theta| \leq \varepsilon] = 1 \\
+&= \lim_{n \rightarrow \infty} P[\theta - \varepsilon \leq Y_n \leq \theta + \varepsilon] \\
+&= \lim_{n \rightarrow \infty} [F_n(\theta+\varepsilon) - F_n(\theta-\varepsilon)] \\
+&= \lim_{n \rightarrow \infty} \left[ 1 - \left(\frac{\theta - \varepsilon}{\theta}\right)^n \right] \\
+&= 1 - \lim_{n \rightarrow \infty} \left( \frac{\theta - \varepsilon}{\theta}\right)^n \\
+& = 1
+\end{align*}
+$\therefore \; Y_n$은 $\theta$의 일치추정량이다. ($\theta$의 불편추정량은 아니다.)
+\end{enumerate}
+
+\item 분포수렴\UP{Convergence in Distribution}
+$$
+X_n \overset{D}{\longrightarrow} X
+$$
+``확률변수의 분포"가 $X$의 ``분포"로 수렴 
+
+\begin{myframe}{Definition}
+\begin{align*}
+X_n &\rightarrow F_{X_n} : cdf  \; of \;  X_n\\
+X &\rightarrow F_{X} : cdf  \; of \;  X
+\end{align*}
+$$
+\lim_{n \rightarrow \infty} F_{X_n}(x) = F_X(x), \quad \forall x \in C(F_n) : F_X\mbox{에서 연속인 점들}
+$$
+$$
+\Rightarrow X_n \overset{D}{\longrightarrow} X
+$$
+\end{myframe}
+
+확률수렴보다 약한 수렴이다.
+\begin{align*}
+X_n \overset{P}{\longrightarrow} X \Rightarrow X_n \overset{D}{\longrightarrow} X \\
+X_n \overset{D}{\longrightarrow} X \not\Rightarrow X_n \overset{P}{\longrightarrow} X \\
+\end{align*}
+
+분포수렴 : $X_n \overset{D}{\longrightarrow} N(0,1)$ 위의 표현과 같다.
+
+\begin{myframe}{퇴화분포\UP{degenerate distribution}}
+$X$가 가질수 있는 값이 하나뿐일 때 (상수)
+
+$\bar{X}_n$ : random variable
+
+$$
+F(\bar{x}) = \int_{-\infty}^{\bar{x}} \frac{1}{\sqrt{\frac{1}{n}} \sqrt{2 \pi}} e^{- \frac{n w^2}{2}} dw
+$$
+적분 안의 식 : $N\left(0, \frac{1}{n} \right)$의 pdf
+
+$v = \sqrt{n}w$
+$$
+F_n(\bar{x}) = \int_{-\infty}^{\sqrt{n} \bar{x}} \frac{1}{\sqrt{2\pi}} e^{-\frac{v^2}{2}} dv
+$$
+적분 안의 식 : $N(0,1)$의 pdf
+
+$$
+\lim_{n \rightarrow \infty} F_n(\bar{x}) = 
+\begin{cases}
+0, \quad& \bar{x} < 0 \; (\sqrt{n} \bar{x} \rightarrow -\infty) \\
+\frac{1}{2} & \bar{x} = 0 \\
+1, & \bar{x} > 0
+\end{cases}
+$$
+
+$$
+F(x) = 
+\begin{cases}
+0, \quad & \bar{x} < 0 \\
+1, & \bar{x} \geq 0
+\end{cases}
+$$
+$\Rightarrow \; \lim_{n \rightarrow \infty} F_n(x) = F(x), \; \bar{x} = 0$을 제외
+
+$\Rightarrow \; \bar{X}_n \overset{D}{\longrightarrow} F$
+
+$\star \; X$ : 이산형인 경우
+
+~$X_n \overset{D}{\rightarrow} X$ 라고 해서
+$$
+\lim_{n \rightarrow \infty} P_n(x) \ne P(x)
+$$
+\end{myframe}
+
+example) pmf of $X_n$
+
+$$
+P_n(x) = 
+\begin{cases}
+1, \quad & x = 2 + \frac{1}{n} \\
+0, & elsewhere
+\end{cases}
+$$
+
+\begin{enumerate}
+\item 
+\begin{align*}
+\lim_{n \rightarrow \infty} P_n(x) &= 
+\begin{cases}
+0, \quad & x = 2 + \frac{1}{\infty} \\
+0, & elsewhere
+\end{cases} \\
+&= 0, \quad \forall x
+\end{align*}
+
+\item
+$$
+F_n(x) = 
+\begin{cases}
+0, \quad & x < 2 + \frac{1}{n} \\
+1, & x \geq 2 + \frac{1}{n}
+\end{cases}
+\quad \mbox{퇴화분포}
+$$
+
+\item
+$$
+\lim_{n \rightarrow \infty} F_n(x) =
+\begin{cases}
+0, \quad & x \leq 2 \\
+1, & x > 2
+\end{cases}
+\quad \mbox{cdf 가 아님}
+$$
+
+\item
+$$
+F(x) =
+\begin{cases}
+0, \quad & x < 2 \\
+1, & x \geq 2
+\end{cases}
+\quad \mbox{cdf 를 만족}
+$$
+$\lim_{n \rightarrow \infty} F_n(x) = F(x), \quad x=2$를 제외! $\Rightarrow \; X_n \overset{D}{\longrightarrow} F$, ~~ 즉, $x =2$에서 퇴화분포
+\end{enumerate}
+
+$X$ : 연속형
+
+웬만한 경우 분포수렴을 보일 때
+
+$$
+\lim_{n \rightarrow \infty} F_n(x) \rightarrow F(x) 
+$$
+대신에 $\lim_{n \rightarrow \infty} f_n(x) = f(x)$로 확인가능.
+
+LDCT\UP{Lebesgue Dominated Convergence Theorem}를 만족할 때,
+$$
+\lim_{n \rightarrow \infty} F_n(x) = \lim_{n \rightarrow \infty} \int_{-\infty}^x f_n(y) dy =  \int_{-\infty}^x \lim_{n \rightarrow \infty} f_n(y) dy
+$$
+$\Rightarrow$ pdf로 분포수렴 확인 가능
+
+\textbf{Example)} 
+
+Let $T_n$ have a t-distribution with $n$ degrees of freedom, $n = 1,2,3,\ldots$. Thus its cdf is
+$$
+F_n(t) = \int_{-\infty}^t \frac{\Gamma[(n+1) / 2]}{\sqrt{\pi n} \Gamma(n/2)} \frac{1}{(1 + y^2 / n)^{(n+1) / 2}} dy,
+$$
+where the integrand is the pdf $f_n(y)$ of $T_n$. Find an asymptotic distribution of $T_n$.
+
+\begin{align*}
+\lim_{n \rightarrow \infty} f_n(y) &= \lim_{n \rightarrow \infty} \frac{\Gamma[(n+1) / 2]}{\sqrt{\pi n} \Gamma(n/2)} \frac{1}{(1 + y^2 / n)^{(n+1) / 2}}\\
+&= \underset{(1)}{\underline{\lim_{n \rightarrow \infty} \frac{1}{\sqrt{2\pi}} \left( 1 + \frac{y^2}{n} \right)^{-\frac{n}{2}} }} \underset{(2)}{\underline{\lim_{n \rightarrow \infty} \left( 1 + \frac{y^2}{n} \right)^{-\frac{1}{2}}}} \underset{(3)}{\underline{\lim_{n \rightarrow \infty}  \frac{\Gamma[(n+1) / 2]}{\sqrt{n/2} \Gamma(n/2)}}}
+\end{align*}
+
+\begin{itemize}
+\item[(1)]
+$$
+\lim_{n \rightarrow \infty} \frac{1}{\sqrt{2\pi}} \left( 1 + \frac{y^2}{n} \right)^{-\frac{n}{2}} = \frac{1}{\sqrt{2\pi}} e^{-\frac{y^2}{2}}, \quad \mbox{e의 정의}
+$$
+
+\item[(2)]
+$$
+\lim_{n \rightarrow \infty} \left( 1 + \frac{y^2}{n} \right)^{-\frac{1}{2}} = 1^{-\frac{1}{2}} = 1
+$$
+
+\item[(3)] $\;$
+
+\begin{myframe}{Stirlings Formula}
+$$
+\Gamma(k+1) \approx \sqrt{2\pi} k^{k+1/2} e^{-k}
+$$
+\begin{align*}
+\lim_{n \rightarrow \infty}  \frac{\Gamma \left( \frac{n+1}{2}\right)}{\sqrt{\frac{n}{2}} \Gamma \left(\frac{n}{2}\right)} 
+&= \lim_{n \rightarrow \infty}  \frac{\Gamma \left( \frac{n-1}{2} + 1\right)}{\frac{n}{2}^{\frac{1}{2}} \Gamma \left(\frac{n-2}{2} + 1\right)} \\
+&\approx \lim_{n \rightarrow \infty} \left(\frac{n}{2}\right)^{-\frac{1}{2}} \frac{\sqrt{2\pi} \left(\frac{n-1}{2}\right)^{\frac{n-1}{2} + \frac{1}{2}} e^{-\frac{n-1}{2}}}{\sqrt{2\pi} \left( \frac{n-2}{2}\right)^{\frac{n-2}{2} + \frac{1}{2}} e^{-\frac{n-2}{2}}} \\
+&= \lim_{n \rightarrow \infty} \left(\frac{n}{2}\right)^{-\frac{1}{2}} \frac{\left(\frac{n-1}{2} \right)^{\frac{n}{2}} e^{-\frac{n-1}{2} + \frac{n-2}{2}}}{\left(\frac{n-2}{2}\right)^{\frac{n-2}{2}} \left(\frac{n-2}{2} \right)^{-\frac{1}{2}}} \\
+&= \lim_{n \rightarrow \infty} \frac{\left(\frac{n}{2}\right)^{-\frac{1}{2}}}{\left(\frac{n-2}{2}\right)^{-\frac{1}{2}}} \left(\frac{n-1}{n-2}\right)^{\frac{n}{2}} e^{-\frac{1}{2}} \\
+&= \lim_{n \rightarrow \infty} \left(\frac{n}{n-2}\right)^{-\frac{1}{2}} \left(1 + \frac{1}{n-2} \right)^{\frac{n}{2}} e^{-\frac{1}{2}} \\
+& = 1 \times e^{\frac{1}{2}} \times e^{-\frac{1}{2}} \\
+&= 1
+\end{align*} 
+\end{itemize}
+
+Example)
+
+Let $X_1, \ldots, X_n \overset{iid}{\sim} U(0,\theta)$, and let $Y_n = max(X_1,\ldots,X_n)$. Find the limiting distribution of $Z_n  = n(\theta - Y_n)$ .
+
+\begin{align*}
+F_n(z) &= P(Z_n \leq z) = P(n(\theta - Y_n) \leq z) \\
+&= P(Y_n \geq \theta - \frac{z}{n}) = 1-P(Y_n \leq \theta - \frac{z}{n}) \\
+&= 1 -  \frac{\left(\theta - \frac{z}{n}\right)^n}{\theta^n} = 1 - (1 - \frac{z/\theta}{n})^n \\
+\lim_{n \rightarrow \infty} F_n(z) &= 1 - e^{-\frac{z}{\theta}}, \quad z \geq 0
+\end{align*}
+$\Rightarrow$ 지수분포의 cdf ($Exp\left(\frac{1}{\theta}\right) = \Gamma(1,\theta)$)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{itemize}
+\end{document}
