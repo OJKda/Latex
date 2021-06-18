@@ -1,0 +1,122 @@
+\documentclass[a4paper, 9pt, 
+               xcolor={svgnames, dvipsnames},
+               hyperref={colorlinks, linkcolor=myblue}]{beamer}
+               
+\definecolor{myblue}{RGB}{0,51,153}
+%--------------------------------------------------------------------------%
+%\usetheme{Boadilla}
+%\usetheme{Singapore}
+%\usecolortheme{dolphin}
+\usetheme{Antibes}
+%\usetheme{JuanLesPins}
+%\usetheme{Singapore}
+\usecolortheme{dove}
+\usefonttheme{structurebold}
+\setbeamertemplate{theorems}[numbered]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}
+   {\insertbackfindforwardnavigationsymbol}
+   
+   \setbeamertemplate{footline}
+{
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+            \usebeamerfont{author in head/foot}\insertshortauthor
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.7\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+            \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+            \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+        \end{beamercolorbox}}%
+        \vskip0pt%
+}
+
+\AtBeginSection[]{
+	\begin{frame}
+	\vfill
+	\begin{center}
+	\Huge\insertsectionhead\par%
+	\end{center}
+	\vfill
+	\end{frame}
+}
+%--------------------------------------------------------------------------%
+% Packages
+\usepackage[hangul]{kotex}
+\usepackage{mathpazo} % For graphics / images	
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % 수식으로 필수
+\usepackage{booktabs}   % for table
+\usepackage{color}
+\DeclareMathOperator*{\argmin}{\operatorname{argmin}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\e}{{\varepsilon}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand {\for}{\quad\mbox{for}\quad}
+\newcommand{\var}{{\rm Var}}
+\newcommand{\m}{\mathsf}
+\newcommand {\DOT}{{\, \cdot \, }}
+\newcommand{\f}{\m{f}}
+\newcommand{\s}{\m{s}}
+\newcommand{\p}{\m{p}}
+\newcommand {\fm}[1]{{\, \f \left( \DOT; #1 \right)}}
+\newcommand {\sm}[1]{{\, \s \left( \DOT; #1 \right)}}
+%\newcommand {\pm}[1]{{\, \p \left( \DOT; #1 \right)}}
+\newcommand {\cm}[1]{{\, \m{c} \left( #1 \right)}}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\ed}{\end{document}}
+\newcommand{\DB}[1]{\textcolor{Blue}{#1}}
+\newcommand{\DR}[1]{\textcolor{DarkRed}{#1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\def\arraystretch{1.5}
+%--------------------------------------------------------------------------%
+% Title page
+\title[Pliable Regression Splines]{Pliable regression splines with an auxiliary variable}
+% \subtitle{Evaluation of a Master thesis}
+\author{Jae-Kwon Oh}
+\institute[Department of Information Statistics \\ Chungbuk National University]{ \includegraphics[scale = 0.4]{cbnulogo} \\ Department of Information Statistics \\ Chungbuk National University}
+\date{2021. 5. 26.}
+
+
+\begin{document}
+\frame{\titlepage}
+
+\section*{Contents}
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+% Section 1
+\input{Introduction.tex}
+
+% Section 2
+\input{PSE.tex}
+
+% Section 3
+\input{Numerical studies.tex}
+
+% Section 4
+\section{Conclusion}
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item 비모수 함수 추정에서 B-spline을 사용하여 예측변수 외에 보조변수 (auxiliary variable) 가 추가된 경우에 적합한 Pliable Spline Estimator 제시
+\vspace{3mm}
+\item Coordinate descent algorithm 으로 목적함수를 최소화
+\vspace{3mm}
+\item 매듭 선택으로 단계적 선택법을 도입으로 최적의 knots 선택
+\vspace{3mm}
+\item 시뮬레이션과 실 데이터 분석을 통해 제안한 모델의 성능 확인
+\end{itemize}
+\end{frame}
+
+\iffalse %(1)
+% Section 5
+\section{Discussion}
+\begin{frame}{Discussion}
+\begin{itemize}
+\item Nonparametric quantile regression function estimator
+\item addition of an appropriate penalty term for knot selection 
+\end{itemize}
+\end{frame}
+\fi %(1)
+
+\end{document}
